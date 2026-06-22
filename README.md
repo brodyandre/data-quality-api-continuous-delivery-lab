@@ -35,8 +35,7 @@
 10. [Como rodar com Docker](#como-rodar-com-docker)
 11. [Como validar Kubernetes/Kustomize](#como-validar-kuberneteskustomize)
 12. [Como configurar GitHub Environments](#como-configurar-github-environments)
-13. [Evidências sugeridas com prints](#evidencias-sugeridas-com-prints)
-14. [Próximos passos](#proximos-passos)
+13. [Próximos passos](#proximos-passos)
 
 <a id="titulo-do-projeto"></a>
 
@@ -318,44 +317,16 @@ Mesmo sem essas variáveis configuradas, os workflows usam fallback para continu
 
 [Voltar ao índice](#indice)
 
-<a id="evidencias-sugeridas-com-prints"></a>
-
-## 13. 📸 Evidências sugeridas com prints
-
-Para apresentar este laboratório a recrutadores técnicos, vale registrar:
-
-- execução bem-sucedida do workflow `CI`
-- execução do workflow `CD Multi Environment`
-- tela dos GitHub Environments configurados
-- aprovação manual ou regra de proteção de `production`
-- logs de renderização por ambiente
-- `make k8s-status` em um cluster local `k3d`
-- respostas de `/health` e `/quality-report`
-
-Organização sugerida dos arquivos:
-
-- `docs/evidence/01-repository-overview.png`
-- `docs/evidence/02-github-environments.png`
-- `docs/evidence/03-environment-variables.png`
-- `docs/evidence/04-production-protection-rule.png`
-- `docs/evidence/05-ci-success.png`
-- `docs/evidence/06-cd-waiting-approval.png`
-- `docs/evidence/07-cd-success.png`
-- `docs/evidence/08-health-endpoint.png`
-- `docs/evidence/09-quality-report-endpoint.png`
-- `docs/evidence/10-kustomize-validation.png`
-
-[Voltar ao índice](#indice)
-
 <a id="proximos-passos"></a>
 
-## 14. 🔭 Próximos passos
+## 13. 🔭 Próximos passos
 
-- publicar imagem em registry
-- trocar o deploy simulado por aplicação real em cluster
-- adicionar verificações de segurança e qualidade de imagem
-- incluir testes de integração na pipeline
-- adicionar observabilidade básica para o ambiente local
-- expandir a documentação de branch protection e aprovação de produção
+Os próximos incrementos naturais para este laboratório são:
+
+- publicar a imagem em um registry para completar o fluxo entre build e deploy
+- substituir o deploy simulado por aplicação real em cluster, mantendo o modelo de ambientes
+- adicionar testes de integração e quality gates mais fortes na pipeline
+- incluir verificações de segurança para dependências e imagem Docker
+- expandir a governança com branch protection e aprovações mais detalhadas em produção
 
 [Voltar ao índice](#indice)
