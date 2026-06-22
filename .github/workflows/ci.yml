@@ -1,41 +1,53 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-      - develop
   pull_request:
+    branches:
+      - main
 
 jobs:
-  test:
+  run-tests:
+    name: Run Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: pip
       - name: Install dependencies
         run: pip install -r requirements.txt -r requirements-dev.txt
-      - name: Run tests
+      - name: Run pytest
         run: pytest -q
 
-  validate-manifests:
+  validate-docker-build:
+    name: Validate Docker Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: imranismail/setup-kustomize@v2
-      - name: Validate development overlay
-        run: kustomize build k8s/overlays/development > /dev/null
-      - name: Validate staging overlay
-        run: kustomize build k8s/overlays/staging > /dev/null
-      - name: Validate production overlay
-        run: kustomize build k8s/overlays/production > /dev/null
-
-  docker-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Build Docker image
         run: docker build -t data-quality-api:ci .
+
+  validate-kubernetes-manifests:
+    name: Validate Kubernetes Manifests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: latest
+      - name: Validate development overlay
+        run: kubectl kustomize k8s/overlays/development > /dev/null
+      - name: Validate staging overlay
+        run: kubectl kustomize k8s/overlays/staging > /dev/null
+      - name: Validate production overlay
+        run: kubectl kustomize k8s/overlays/production > /dev/null
