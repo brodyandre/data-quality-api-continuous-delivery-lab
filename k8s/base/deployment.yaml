@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-quality-api
+  labels:
+    app: data-quality-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-quality-api
+  template:
+    metadata:
+      labels:
+        app: data-quality-api
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/example/data-quality-api:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: data-quality-api-config

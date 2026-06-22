@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-quality-api
+  labels:
+    app: data-quality-api
+spec:
+  selector:
+    app: data-quality-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000

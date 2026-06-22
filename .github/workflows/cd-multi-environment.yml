@@ -1,0 +1,56 @@
+name: CD Multi Environment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-development:
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - uses: actions/checkout@v4
+      - uses: imranismail/setup-kustomize@v2
+      - name: Render development manifests
+        run: kustomize build k8s/overlays/development > development-manifests.yaml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: development-manifests
+          path: development-manifests.yaml
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: deploy-development
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: imranismail/setup-kustomize@v2
+      - name: Render staging manifests
+        run: kustomize build k8s/overlays/staging > staging-manifests.yaml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: staging-manifests
+          path: staging-manifests.yaml
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: imranismail/setup-kustomize@v2
+      - name: Render production manifests
+        run: kustomize build k8s/overlays/production > production-manifests.yaml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: production-manifests
+          path: production-manifests.yaml
