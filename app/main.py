@@ -37,15 +37,15 @@ def build_quality_report(
 
 @app.get("/health", response_model=HealthResponse)
 def health_check() -> HealthResponse:
-    return HealthResponse(status="ok")
+    return HealthResponse(status="healthy")
 
 
 @app.get("/version", response_model=VersionResponse)
 def get_version() -> VersionResponse:
     settings = get_settings()
     return VersionResponse(
-        application=settings.app_name,
-        version=settings.app_version,
+        app_name=settings.app_name,
+        app_version=settings.app_version,
         environment=settings.app_env,
     )
 
@@ -54,8 +54,7 @@ def get_version() -> VersionResponse:
 def get_environment() -> EnvironmentResponse:
     settings = get_settings()
     return EnvironmentResponse(
-        app_env=settings.app_env,
-        app_version=settings.app_version,
+        environment=settings.app_env,
         quality_threshold=settings.quality_threshold,
         log_level=settings.log_level,
     )

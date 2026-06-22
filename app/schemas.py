@@ -8,14 +8,13 @@ class HealthResponse(BaseModel):
 
 
 class VersionResponse(BaseModel):
-    application: str
-    version: str
+    app_name: str
+    app_version: str
     environment: str
 
 
 class EnvironmentResponse(BaseModel):
-    app_env: str
-    app_version: str
+    environment: str
     quality_threshold: int
     log_level: str
 

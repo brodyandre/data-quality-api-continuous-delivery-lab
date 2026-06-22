@@ -1,6 +1,7 @@
 PYTHON ?= python3
 PIP ?= $(PYTHON) -m pip
 KUSTOMIZE ?= kubectl kustomize
+TEST_PYTHON := $(if $(wildcard .venv/bin/python),.venv/bin/python,$(PYTHON))
 
 .PHONY: install run test docker-build render-development render-staging render-production
 
@@ -11,7 +12,7 @@ run:
 	uvicorn app.main:app --reload
 
 test:
-	pytest -q
+	$(TEST_PYTHON) -m pytest -q
 
 docker-build:
 	docker build -t data-quality-api:local .
