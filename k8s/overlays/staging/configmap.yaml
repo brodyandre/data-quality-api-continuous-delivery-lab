@@ -5,4 +5,5 @@ metadata:
 data:
   APP_ENV: staging
   APP_VERSION: 0.1.0-staging
-  DEFAULT_NULL_THRESHOLD: "0.15"
+  QUALITY_THRESHOLD: "93"
+  LOG_LEVEL: info

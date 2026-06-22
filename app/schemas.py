@@ -1,29 +1,30 @@
-from typing import Any
+from datetime import datetime
 
 from pydantic import BaseModel, Field
 
 
 class HealthResponse(BaseModel):
     status: str
-    environment: str
+
+
+class VersionResponse(BaseModel):
+    application: str
     version: str
+    environment: str
 
 
-class MissingFieldSummary(BaseModel):
-    field: str
-    missing_count: int
-    missing_ratio: float
+class EnvironmentResponse(BaseModel):
+    app_env: str
+    app_version: str
+    quality_threshold: int
+    log_level: str
 
 
-class QualityCheckRequest(BaseModel):
-    records: list[dict[str, Any]]
-    required_fields: list[str] = Field(default_factory=list)
-    null_threshold: float | None = Field(default=None, ge=0.0, le=1.0)
-
-
-class QualityCheckResponse(BaseModel):
-    total_records: int
-    required_fields: list[str]
-    null_threshold: float
-    missing_fields: list[MissingFieldSummary]
-    is_valid: bool
+class QualityReportResponse(BaseModel):
+    environment: str
+    pipeline_status: str
+    records_processed: int = Field(ge=0)
+    quality_score: float = Field(ge=0, le=100)
+    threshold: int = Field(ge=0, le=100)
+    passed: bool
+    checked_at: datetime

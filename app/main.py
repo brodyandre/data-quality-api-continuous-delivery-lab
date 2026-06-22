@@ -1,73 +1,66 @@
-from typing import Any
+from datetime import datetime, timezone
 
 from fastapi import FastAPI
 
 from app.schemas import (
+    EnvironmentResponse,
     HealthResponse,
-    MissingFieldSummary,
-    QualityCheckRequest,
-    QualityCheckResponse,
+    QualityReportResponse,
+    VersionResponse,
 )
-from app.settings import get_settings
-
-settings = get_settings()
+from app.settings import Settings, get_settings
 
 app = FastAPI(
-    title=settings.app_name,
-    version=settings.app_version,
+    title="data-quality-api",
+    version="0.1.0",
     description="Simple API used to demonstrate continuous delivery workflows.",
 )
 
 
-def is_missing(value: Any) -> bool:
-    return value is None or (isinstance(value, str) and value.strip() == "")
+def build_quality_report(
+    settings: Settings, checked_at: datetime | None = None
+) -> QualityReportResponse:
+    report_checked_at = checked_at or datetime.now(timezone.utc)
+    quality_score = 96.4
+    records_processed = 125000
 
-
-@app.get("/")
-def read_root() -> dict[str, str]:
-    return {
-        "message": "Data Quality API is running.",
-        "environment": settings.app_env,
-        "docs_url": "/docs",
-    }
+    return QualityReportResponse(
+        environment=settings.app_env,
+        pipeline_status="success",
+        records_processed=records_processed,
+        quality_score=quality_score,
+        threshold=settings.quality_threshold,
+        passed=quality_score >= settings.quality_threshold,
+        checked_at=report_checked_at,
+    )
 
 
 @app.get("/health", response_model=HealthResponse)
 def health_check() -> HealthResponse:
-    return HealthResponse(
-        status="ok",
-        environment=settings.app_env,
+    return HealthResponse(status="ok")
+
+
+@app.get("/version", response_model=VersionResponse)
+def get_version() -> VersionResponse:
+    settings = get_settings()
+    return VersionResponse(
+        application=settings.app_name,
         version=settings.app_version,
+        environment=settings.app_env,
     )
 
 
-@app.post("/quality/check", response_model=QualityCheckResponse)
-def quality_check(payload: QualityCheckRequest) -> QualityCheckResponse:
-    threshold = (
-        payload.null_threshold
-        if payload.null_threshold is not None
-        else settings.default_null_threshold
+@app.get("/environment", response_model=EnvironmentResponse)
+def get_environment() -> EnvironmentResponse:
+    settings = get_settings()
+    return EnvironmentResponse(
+        app_env=settings.app_env,
+        app_version=settings.app_version,
+        quality_threshold=settings.quality_threshold,
+        log_level=settings.log_level,
     )
-    total_records = len(payload.records)
-    missing_fields: list[MissingFieldSummary] = []
 
-    for field in payload.required_fields:
-        missing_count = sum(1 for record in payload.records if is_missing(record.get(field)))
-        missing_ratio = (missing_count / total_records) if total_records else 0.0
-        missing_fields.append(
-            MissingFieldSummary(
-                field=field,
-                missing_count=missing_count,
-                missing_ratio=round(missing_ratio, 4),
-            )
-        )
 
-    is_valid = all(item.missing_ratio <= threshold for item in missing_fields)
-
-    return QualityCheckResponse(
-        total_records=total_records,
-        required_fields=payload.required_fields,
-        null_threshold=threshold,
-        missing_fields=missing_fields,
-        is_valid=is_valid,
-    )
+@app.get("/quality-report", response_model=QualityReportResponse)
+def get_quality_report() -> QualityReportResponse:
+    return build_quality_report(get_settings())

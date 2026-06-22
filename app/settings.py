@@ -1,27 +1,26 @@
-from dataclasses import dataclass
-from functools import lru_cache
 import os
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
 class Settings:
-    app_name: str = "Data Quality API"
-    app_env: str = "development"
+    app_name: str = "data-quality-api"
+    app_env: str = "local"
     app_version: str = "0.1.0"
-    default_null_threshold: float = 0.2
+    quality_threshold: int = 90
+    log_level: str = "info"
 
     @classmethod
     def from_env(cls) -> "Settings":
         return cls(
-            app_name=os.getenv("APP_NAME", cls.app_name),
             app_env=os.getenv("APP_ENV", cls.app_env),
             app_version=os.getenv("APP_VERSION", cls.app_version),
-            default_null_threshold=float(
-                os.getenv("DEFAULT_NULL_THRESHOLD", cls.default_null_threshold)
+            quality_threshold=int(
+                os.getenv("QUALITY_THRESHOLD", str(cls.quality_threshold))
             ),
+            log_level=os.getenv("LOG_LEVEL", cls.log_level),
         )
 
 
-@lru_cache
 def get_settings() -> Settings:
     return Settings.from_env()

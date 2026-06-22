@@ -33,6 +33,13 @@ make run
 
 API disponivel em `http://127.0.0.1:8000` e documentacao interativa em `http://127.0.0.1:8000/docs`.
 
+## Endpoints
+
+- `GET /health`
+- `GET /version`
+- `GET /environment`
+- `GET /quality-report`
+
 ## Comandos uteis
 
 ```bash

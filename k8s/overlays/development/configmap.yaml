@@ -5,4 +5,5 @@ metadata:
 data:
   APP_ENV: development
   APP_VERSION: 0.1.0-development
-  DEFAULT_NULL_THRESHOLD: "0.25"
+  QUALITY_THRESHOLD: "90"
+  LOG_LEVEL: info
