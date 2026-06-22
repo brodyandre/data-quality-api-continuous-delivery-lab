@@ -46,8 +46,7 @@
 
 Laboratório voltado para estudo e demonstração de CI/CD com foco em GitHub Actions, GitHub Environments, proteção de produção e entrega contínua entre múltiplos ambientes.
 
-> 📸 **Espaço para print:** `docs/evidence/01-repository-overview.png`  
-> Use este ponto para mostrar a visão geral do repositório no GitHub.
+![Repository Overview](docs/evidence/01-repository-overview.png)
 
 [Voltar ao índice](#indice)
 
@@ -148,8 +147,7 @@ Etapas principais:
 5. validação do build Docker
 6. validação dos overlays com `kubectl kustomize`
 
-> 📸 **Espaço para print:** `docs/evidence/05-ci-success.png`  
-> Ideal para mostrar o workflow `CI` concluído com sucesso.
+![CI Workflow Success](docs/evidence/05-ci-success.png)
 
 ### CD
 
@@ -164,11 +162,13 @@ Sequência:
 
 Cada job de deploy usa um GitHub Environment e simula a entrega renderizando o overlay correspondente. O objetivo é destacar governança, promoção e proteção de produção, não executar deploy real em cloud.
 
-> 📸 **Espaço para print:** `docs/evidence/06-cd-waiting-approval.png`  
-> Use aqui a execução aguardando aprovação em `production`.
+### CD aguardando aprovação em `production`
 
-> 📸 **Espaço para print:** `docs/evidence/07-cd-success.png`  
-> Use aqui a execução final do workflow de CD concluída com sucesso.
+![CD Waiting Approval](docs/evidence/06-cd-waiting-approval.png)
+
+### CD concluído com sucesso
+
+![CD Workflow Success](docs/evidence/07-cd-success.png)
 
 [Voltar ao índice](#indice)
 
@@ -209,11 +209,13 @@ curl http://127.0.0.1:8000/environment
 curl http://127.0.0.1:8000/quality-report
 ```
 
-> 📸 **Espaço para print:** `docs/evidence/08-health-endpoint.png`  
-> Indicado para a resposta do endpoint `/health`.
+### Endpoint `/health`
 
-> 📸 **Espaço para print:** `docs/evidence/09-quality-report-endpoint.png`  
-> Indicado para a resposta do endpoint `/quality-report`.
+![Health Endpoint](docs/evidence/08-health-endpoint.png)
+
+### Endpoint `/quality-report`
+
+![Quality Report Endpoint](docs/evidence/09-quality-report-endpoint.png)
 
 [Voltar ao índice](#indice)
 
@@ -268,8 +270,7 @@ make k8s-port-forward
 
 Guia detalhado: [docs/local-kubernetes.md](docs/local-kubernetes.md)
 
-> 📸 **Espaço para print:** `docs/evidence/10-kustomize-validation.png`  
-> Ideal para mostrar a validação dos três ambientes com `kubectl kustomize`.
+![Kustomize Validation](docs/evidence/10-kustomize-validation.png)
 
 [Voltar ao índice](#indice)
 
@@ -303,14 +304,17 @@ Sugestão de governança:
 
 Mesmo sem essas variáveis configuradas, os workflows usam fallback para continuar funcionais.
 
-> 📸 **Espaço para print:** `docs/evidence/02-github-environments.png`  
-> Mostre aqui a lista de environments do repositório.
+### GitHub Environments
 
-> 📸 **Espaço para print:** `docs/evidence/03-environment-variables.png`  
-> Mostre aqui as variables configuradas por environment.
+![GitHub Environments](docs/evidence/02-github-environments.png)
 
-> 📸 **Espaço para print:** `docs/evidence/04-production-protection-rule.png`  
-> Mostre aqui a regra de proteção ou aprovação do environment `production`.
+### Variables por environment
+
+![Environment Variables](docs/evidence/03-environment-variables.png)
+
+### Protection rule de `production`
+
+![Production Protection Rule](docs/evidence/04-production-protection-rule.png)
 
 [Voltar ao índice](#indice)
 
