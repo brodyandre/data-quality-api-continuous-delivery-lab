@@ -1,8 +1,13 @@
 .git
 .github
 .venv
+.agents
+.codex
 __pycache__
 .pytest_cache
 *.pyc
 docs
 tests
+k8s
+.gitignore
+Makefile

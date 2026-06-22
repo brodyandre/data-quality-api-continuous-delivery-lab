@@ -28,10 +28,41 @@ docs/
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt -r requirements-dev.txt
+make test
 make run
 ```
 
 API disponivel em `http://127.0.0.1:8000` e documentacao interativa em `http://127.0.0.1:8000/docs`.
+
+## Comandos
+
+```bash
+# criar ambiente virtual
+python3 -m venv .venv
+
+# ativar ambiente virtual
+source .venv/bin/activate
+
+# instalar dependencias
+pip install -r requirements.txt -r requirements-dev.txt
+
+# rodar testes
+make test
+
+# rodar API localmente
+make run
+
+# buildar imagem Docker
+docker build -t data-quality-api:local .
+
+# executar container Docker
+docker run --rm -p 8000:8000 \
+  -e APP_ENV=local \
+  -e APP_VERSION=0.1.0 \
+  -e QUALITY_THRESHOLD=90 \
+  -e LOG_LEVEL=info \
+  data-quality-api:local
+```
 
 ## Endpoints
 
@@ -40,14 +71,16 @@ API disponivel em `http://127.0.0.1:8000` e documentacao interativa em `http://1
 - `GET /environment`
 - `GET /quality-report`
 
-## Comandos uteis
+## Exemplos curl
 
 ```bash
-make test
-make docker-build
-make render-development
-make render-staging
-make render-production
+curl http://127.0.0.1:8000/health
+
+curl http://127.0.0.1:8000/version
+
+curl http://127.0.0.1:8000/environment
+
+curl http://127.0.0.1:8000/quality-report
 ```
 
 ## Fluxo do laboratorio
