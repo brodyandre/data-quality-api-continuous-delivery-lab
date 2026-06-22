@@ -1,46 +1,55 @@
 # Pipeline Flow
 
+Este repositorio separa claramente validacao tecnica e promocao entre ambientes.
+O foco e demonstrar CI/CD com GitHub Actions, GitHub Environments e protecao de producao.
+
+## Visao geral
+
+- `pull_request` para `main`: executa CI
+- `push` para `main`: executa CI e CD
+- `workflow_dispatch`: permite executar os workflows manualmente
+
 ## CI
 
-Em `push` e `pull_request`, o workflow `ci.yml`:
+O workflow `ci.yml` valida a base do projeto antes de qualquer promocao.
 
-1. instala dependencias
-2. executa os testes com `pytest`
-3. valida os manifests com `kustomize build`
-4. faz build da imagem Docker
+Etapas principais:
+
+1. checkout do codigo
+2. setup do Python
+3. instalacao de dependencias
+4. execucao dos testes com `pytest`
+5. validacao do build Docker
+6. validacao dos overlays com `kubectl kustomize`
 
 ## CD
 
-Em `push` para `main` ou acionamento manual, o workflow `cd-multi-environment.yml`:
+O workflow `cd-multi-environment.yml` demonstra promocao sequencial entre ambientes.
 
-1. renderiza o overlay de `development`
-2. renderiza o overlay de `staging`
-3. renderiza o overlay de `production`
+Sequencia dos jobs:
 
-## Estrutura dos manifests
+1. `build`
+2. `deploy-development`
+3. `deploy-staging`
+4. `deploy-production`
 
-`k8s/base` guarda os manifests compartilhados da aplicacao:
+Cada job de deploy:
 
-- `Deployment`
-- `Service`
+- usa um GitHub Environment
+- imprime as variaveis do ambiente
+- aplica fallback caso `vars.APP_ENV`, `vars.QUALITY_THRESHOLD` ou `vars.LOG_LEVEL` ainda nao estejam configuradas
+- simula o deploy renderizando o overlay com `kubectl kustomize`
 
-Cada overlay em `k8s/overlays` define apenas o que muda por ambiente:
+## O que e simulado
 
-- `APP_ENV`
-- `QUALITY_THRESHOLD`
-- `LOG_LEVEL`
-- quantidade de replicas
+Neste laboratorio:
 
-Nesta versao:
+- a imagem Docker e buildada, mas nao publicada
+- os manifests sao renderizados por ambiente
+- nao ha deploy real em cloud
+- nao ha uso de secrets reais
 
-- `development`: 1 replica, threshold `80`, log `debug`
-- `staging`: 1 replica, threshold `90`, log `info`
-- `production`: 2 replicas, threshold `95`, log `warning`
+## Execucao local opcional
 
-Neste laboratorio, o workflow de CD gera os manifests renderizados como artefatos.
-Quando houver cluster e credenciais, a entrega pode usar `kubectl apply -k k8s/overlays/<ambiente>`.
-
-## Execucao local
-
-O uso de `k3d` e apenas para demonstracao local.
-Os workflows do GitHub Actions continuam didaticos e nao dependem de cluster local.
+O uso de `k3d` serve para demonstrar deploy local real em Kubernetes sem alterar o comportamento dos workflows remotos.
+Os workflows do GitHub Actions continuam didaticos e independentes de cluster local.

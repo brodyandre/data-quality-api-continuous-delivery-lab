@@ -1,16 +1,37 @@
 # Protection Rules
 
-Sugestao de configuracao para os ambientes do GitHub:
+Este documento resume uma configuracao simples e profissional para demonstrar governanca no fluxo de entrega continua.
 
-- `development`: sem aprovacao manual, para demonstracoes rapidas.
-- `staging`: exigir pelo menos 1 aprovador.
-- `production`: exigir aprovacao manual, limitar deploy a mantenedores e proteger a branch `main`.
+## GitHub Environments
 
-## Regras recomendadas
+| Environment | Sugestao de regra |
+| --- | --- |
+| `development` | sem aprovacao manual |
+| `staging` | pelo menos 1 aprovador |
+| `production` | aprovacao manual obrigatoria e acesso restrito |
 
-- Ativar branch protection na `main`.
-- Exigir status checks do workflow `CI`.
-- Configurar GitHub Environments com o mesmo nome dos jobs: `development`, `staging` e `production`.
-- Em `production`, habilitar reviewers obrigatorios.
+## Branch protection
 
-Essas protecoes deixam o fluxo simples, mas ja mostram controles reais de promocao.
+Sugestoes para a branch `main`:
+
+- exigir status checks do workflow `CI`
+- bloquear merge com checks pendentes ou falhos
+- exigir branch atualizada antes do merge, se fizer sentido para a demonstracao
+- limitar bypass de regras a mantenedores do repositorio
+
+## Producao
+
+Para reforcar a narrativa do laboratorio:
+
+- configure reviewers obrigatorios em `production`
+- use `production` como ultima etapa da promocao
+- deixe claro que a aprovacao existe para representar controle, nao deploy real em cloud
+
+## Objetivo dessas regras
+
+O valor dessas configuracoes esta em demonstrar:
+
+- separacao entre ambientes
+- gates de aprovacao
+- protecao de producao
+- boas praticas de governanca em pipelines de CI/CD
