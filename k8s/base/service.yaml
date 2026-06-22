@@ -3,11 +3,13 @@ kind: Service
 metadata:
   name: data-quality-api
   labels:
-    app: data-quality-api
+    app.kubernetes.io/name: data-quality-api
+    app.kubernetes.io/component: api
 spec:
+  type: ClusterIP
   selector:
-    app: data-quality-api
+    app.kubernetes.io/name: data-quality-api
   ports:
     - name: http
-      port: 80
+      port: 8000
       targetPort: 8000

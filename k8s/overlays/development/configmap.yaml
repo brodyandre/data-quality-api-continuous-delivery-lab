@@ -4,6 +4,5 @@ metadata:
   name: data-quality-api-config
 data:
   APP_ENV: development
-  APP_VERSION: 0.1.0-development
-  QUALITY_THRESHOLD: "90"
-  LOG_LEVEL: info
+  QUALITY_THRESHOLD: "80"
+  LOG_LEVEL: debug

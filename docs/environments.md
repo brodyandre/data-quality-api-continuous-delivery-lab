@@ -8,10 +8,10 @@ O laboratorio usa tres ambientes com a mesma base de deploy e pequenas variacoes
 
 ## Variaveis por ambiente
 
-| Ambiente | APP_ENV | APP_VERSION | QUALITY_THRESHOLD | LOG_LEVEL |
+| Ambiente | APP_ENV | QUALITY_THRESHOLD | LOG_LEVEL | Replicas |
 | --- | --- | --- | --- | --- |
-| development | `development` | `0.1.0-development` | `90` | `info` |
-| staging | `staging` | `0.1.0-staging` | `93` | `info` |
-| production | `production` | `0.1.0` | `95` | `warning` |
+| development | `development` | `80` | `debug` | `1` |
+| staging | `staging` | `90` | `info` | `1` |
+| production | `production` | `95` | `warning` | `2` |
 
-Cada overlay adiciona namespace, sufixo de nome e `ConfigMap` proprio.
+Cada overlay reutiliza a mesma base e muda apenas as variaveis de ambiente e a quantidade de replicas.
