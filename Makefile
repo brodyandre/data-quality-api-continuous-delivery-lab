@@ -9,9 +9,28 @@ CLUSTER_NAME ?= data-quality-lab
 K8S_ENV ?= development
 PORT_FORWARD_PORT ?= 8000
 
-.PHONY: install run test cluster-create cluster-delete docker-build cluster-import-image \
+.PHONY: help install run test cluster-create cluster-delete docker-build cluster-import-image \
 	k8s-validate k8s-deploy-dev k8s-deploy-staging k8s-deploy-production \
 	k8s-status k8s-port-forward k8s-clean render-development render-staging render-production
+
+help:
+	@printf "make install                 Instala dependencias do projeto.\n"
+	@printf "make run                     Executa a API localmente.\n"
+	@printf "make test                    Executa os testes automatizados.\n"
+	@printf "make docker-build            Cria a imagem Docker local.\n"
+	@printf "make cluster-create          Cria o cluster Kubernetes local com k3d.\n"
+	@printf "make cluster-import-image    Importa a imagem Docker local para o cluster k3d.\n"
+	@printf "make k8s-validate            Valida os overlays Kustomize de development, staging e production.\n"
+	@printf "make k8s-deploy-dev          Faz deploy local no ambiente development.\n"
+	@printf "make k8s-deploy-staging      Faz deploy local no ambiente staging.\n"
+	@printf "make k8s-deploy-production   Faz deploy local no ambiente production.\n"
+	@printf "make k8s-status              Mostra deployment, pods e service do ambiente configurado em K8S_ENV.\n"
+	@printf "make k8s-port-forward        Expoe localmente o service da API na porta 8000.\n"
+	@printf "make k8s-clean               Remove os recursos Kubernetes dos ambientes development, staging e production.\n"
+	@printf "make cluster-delete          Remove o cluster Kubernetes local.\n"
+	@printf "make render-development      Renderiza os manifests finais do ambiente development.\n"
+	@printf "make render-staging          Renderiza os manifests finais do ambiente staging.\n"
+	@printf "make render-production       Renderiza os manifests finais do ambiente production.\n"
 
 install:
 	$(PIP) install -r requirements.txt -r requirements-dev.txt
