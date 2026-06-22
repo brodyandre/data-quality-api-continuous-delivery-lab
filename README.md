@@ -71,6 +71,21 @@ docker run --rm -p 8000:8000 \
 - `GET /environment`
 - `GET /quality-report`
 
+## Running on local Kubernetes
+
+O suporte a `k3d` e opcional e nao faz parte obrigatoria dos testes ou do CD.
+
+```bash
+make cluster-create
+make docker-build
+make cluster-import-image
+make k8s-deploy-dev
+make k8s-status K8S_ENV=development
+make k8s-port-forward
+```
+
+Detalhes adicionais em `docs/local-kubernetes.md`.
+
 ## Exemplos curl
 
 ```bash

@@ -39,3 +39,8 @@ Nesta versao:
 
 Neste laboratorio, o workflow de CD gera os manifests renderizados como artefatos.
 Quando houver cluster e credenciais, a entrega pode usar `kubectl apply -k k8s/overlays/<ambiente>`.
+
+## Execucao local
+
+O uso de `k3d` e apenas para demonstracao local.
+Os workflows do GitHub Actions continuam didaticos e nao dependem de cluster local.
